@@ -1,0 +1,17 @@
+/dts-v1/;
+
+#include "ar9331_tplink_tl-wr720n.dtsi"
+
+/ {
+    compatible = "tplink,tl-wr720n-v3", "qca,ar9331";
+    model = "TP-Link TL-WR720N v3";
+};
+
+&switch0 {
+    ports {
+        port@0 { reg = <0>; label = "wan"; };
+        port@1 { reg = <1>; label = "lan1"; };
+        port@2 { reg = <2>; label = "lan2"; };
+        port@6 { reg = <6>; label = "cpu"; ethernet = <&eth0>; };
+    };
+};
