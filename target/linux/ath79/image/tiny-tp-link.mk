@@ -269,6 +269,17 @@ define Device/tplink_tl-wr703n
 endef
 TARGET_DEVICES += tplink_tl-wr703n
 
+define Device/tplink_tl-wr720n-v3
+  SOC := ar9331
+  DEVICE_VENDOR := TP-Link
+  DEVICE_MODEL := TL-WR720N
+  DEVICE_VARIANT := v3
+  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-printer p910nd
+  TPLINK_HWID := 0x07200003
+  IMAGE_SIZE := 15872k
+endef
+TARGET_DEVICES += tplink_tl-wr720n-v3
+
 define Device/tplink_tl-wr740n-v1
   $(Device/tplink-4m)
   SOC := ar7240
