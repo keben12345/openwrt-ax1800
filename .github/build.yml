@@ -1,4 +1,4 @@
-name: openwrt-build-github-actions
+name: openwrt-build-github-actions-720n-v3
 
 on:
   workflow_dispatch:
