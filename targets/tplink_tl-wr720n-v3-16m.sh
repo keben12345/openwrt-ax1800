@@ -1,46 +1,21 @@
 #!/bin/bash
 set -e
 
-target_dts='openwrt/target/linux/ath79/dts/ar9331_tplink_tl-wr720n-v3-16m.dts'
+cat <<EOF >> openwrt/.config
 
-echo "Add TL-WR720N v3 16M support"
+CONFIG_TARGET_ath79=y
+CONFIG_TARGET_ath79_tiny=y
+CONFIG_TARGET_ath79_tiny_DEVICE_tplink_tl-wr720n-v3=y
 
-# 复制703N dtsi
-cp openwrt/target/linux/ath79/dts/ar9331_tplink_tl-wr703n_tl-mr10u.dtsi \
-openwrt/target/linux/ath79/dts/ar9331_tplink_tl-wr720n-v3-16m.dtsi
+CONFIG_TARGET_ROOTFS_PARTSIZE=12
+CONFIG_TARGET_KERNEL_PARTSIZE=4
 
-# 修改 flash 分区为16MB
-sed -i 's|reg = <0x20000 0x3d0000>|reg = <0x20000 0xfd0000>|' \
-openwrt/target/linux/ath79/dts/ar9331_tplink_tl-wr720n-v3-16m.dtsi
+CONFIG_PACKAGE_luci=y
+CONFIG_PACKAGE_luci-i18n-base-zh-cn=y
 
-sed -i 's|partition@3f0000|partition@ff0000|' \
-openwrt/target/linux/ath79/dts/ar9331_tplink_tl-wr720n-v3-16m.dtsi
-
-sed -i 's|reg = <0x3f0000 0x10000>|reg = <0xff0000 0x10000>|' \
-openwrt/target/linux/ath79/dts/ar9331_tplink_tl-wr720n-v3-16m.dtsi
-
-# 复制703N DTS
-cp openwrt/target/linux/ath79/dts/ar9331_tplink_tl-wr703n.dts "${target_dts}"
-
-# 修改设备名称
-sed -i 's|wr703n_tl-mr10u.dtsi|wr720n-v3-16m.dtsi"|' "${target_dts}"
-
-sed -i 's|"tplink,tl-wr703n"|"tplink,tl-wr720n-v3-16m", "tplink,tl-wr703n"|' "${target_dts}"
-
-sed -i 's|"TP-Link TL-WR703N"|"TP-Link TL-WR720N v3 (16M)"|' "${target_dts}"
-
-# 添加设备 profile
-cat <<EOF >> openwrt/target/linux/ath79/image/tiny-tp-link.mk
-
-define Device/tplink_tl-wr720n-v3-16m
-  \$(Device/tplink-16mlzma)
-  SOC := ar9331
-  DEVICE_MODEL := TL-WR720N
-  DEVICE_VARIANT := v3 (16M)
-  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-printer p910nd luci-app-p910nd
-  TPLINK_HWID := 0x07200003
-  SUPPORTED_DEVICES += tl-wr720n-v3-16m
-endef
-TARGET_DEVICES += tplink_tl-wr720n-v3-16m
+CONFIG_PACKAGE_p910nd=y
+CONFIG_PACKAGE_kmod-usb-printer=y
+CONFIG_PACKAGE_kmod-usb2=y
+CONFIG_PACKAGE_kmod-usb-core=y
 
 EOF
